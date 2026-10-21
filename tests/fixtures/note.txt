@@ -1,0 +1,3 @@
+Plain text fixture.
+
+It has two paragraphs and three sentences total. The parser should keep them.

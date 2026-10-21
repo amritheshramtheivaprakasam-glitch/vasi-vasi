@@ -7,7 +7,11 @@
    ============================================================ */
 'use strict';
 
-const VERSION = 'vasi-vasi-v2';
+const VERSION = 'vasi-vasi-v3';
+/* The vendor/ parser libraries (pdf.js, JSZip, Mammoth, Readability)
+   are intentionally NOT precached: they load lazily on first import of
+   their format, and the runtime handler below caches them then — so
+   first visit stays light while offline import works after any use. */
 const SHELL = [
   './',
   './index.html',
@@ -27,6 +31,14 @@ const SHELL = [
   './src/core/documentParser.js',
   './src/core/speechEngine.js',
   './src/core/readerEngine.js',
+  './src/documents/vendorLoader.js',
+  './src/documents/qualityGate.js',
+  './src/documents/textBlocks.js',
+  './src/documents/pdfAdapter.js',
+  './src/documents/docxAdapter.js',
+  './src/documents/epubAdapter.js',
+  './src/documents/urlAdapter.js',
+  './src/documents/importManager.js',
   './src/ui/shortcuts.js',
   './src/ui/dialogs.js',
   './src/ui/libraryView.js',

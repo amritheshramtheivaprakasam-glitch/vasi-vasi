@@ -42,6 +42,7 @@
   font-weight: 700;
 }
 .chip-progress { background: var(--hl-bg); color: var(--hl-ink); border-color: transparent; }
+.chip-warning { background: var(--warning-bg); color: var(--warning-ink); border-color: transparent; }
 .doc-actions { display: flex; gap: var(--sp-2); flex-wrap: wrap; }
 
 .empty-state {

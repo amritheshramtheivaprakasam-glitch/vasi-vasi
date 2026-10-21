@@ -60,7 +60,7 @@
       emitter.emit('change');
     },
 
-    _build(title, text, source) {
+    _build(title, text, source, meta) {
       const now = Date.now();
       title = VV.util.truncate(title || 'Untitled', VV.config.LIMITS.titleMax);
       if (text.length > VV.config.LIMITS.maxDocumentChars) {
@@ -72,6 +72,7 @@
         text,
         lang: detectLang(text),
         source,
+        meta: meta || {}, // { format, pageCount, chapters, sourceUrl, warnings }
         addedAt: now,
         updatedAt: now,
         stats: computeStats(text)
@@ -88,9 +89,9 @@
       return documents.find((d) => d.id === id) || null;
     },
 
-    add(title, text, source) {
+    add(title, text, source, meta) {
       this.init();
-      const doc = this._build(title, text, source || 'paste');
+      const doc = this._build(title, text, source || 'paste', meta);
       documents.unshift(doc); // newest first
       save();
       emitter.emit('change');

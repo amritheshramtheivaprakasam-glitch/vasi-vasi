@@ -32,7 +32,8 @@ sentence-by-sentence audio using the voices **already built into your device**.
 
 ## 🎯 Features
 
-- **Library on your device** — paste text or import `.txt` files; keep as many documents as you like.
+- **Library on your device** — paste text or import files; keep as many documents as you like.
+- **Reads PDF, DOCX, EPUB, text files and web articles** — locally processed, validated and converted to clean reading sessions (see table below).
 - **Sentence-by-sentence reading** with the current sentence always highlighted and auto-scrolled.
 - **Word-level "karaoke" highlight** — each word lights up as it is spoken (in supported browsers).
 - **Tamil & English voices** — voices are grouped by language; Tamil voices automatically take priority.
@@ -42,6 +43,28 @@ sentence-by-sentence audio using the voices **already built into your device**.
 - **Click any sentence** to start reading from exactly there.
 - **Themes** — light (warm paper), dark, and a **high-contrast** theme for low vision, plus adjustable reading text size and serif/sans font.
 - **Installable (PWA)** — "Add to Home screen" to use it like a regular app, fully offline.
+
+## 📥 Supported document formats
+
+Every import flows through ONE pipeline: **byte-signature routing** (the
+extension is never trusted) → **format adapter** (vendored, local) →
+**quality gate** (bad output never reaches the reader or speech engine) →
+library.
+
+| Source | Engine (vendored, license) | Honest limitations |
+|---|---|---|
+| **PDF** (text layer) | pdf.js 3.11.174 (Apache-2.0), worker + cMaps bundled | Multi-column order is best-effort; each PDF page = one paragraph (Shift+←/→ navigates pages) |
+| **Scanned PDF** | — | **Not yet supported** — detected page-by-page and reported with a clear spoken error (OCR is a future release) |
+| **DOCX** | Mammoth 1.8.0 (BSD-2-Clause) | Floating/complex layouts collapse to reading order |
+| **EPUB** | JSZip 3.10.1 (MIT) | Chapters follow spine order; DRM-locked EPUBs fail with an honest message |
+| **Web article** | Readability 0.5.0 (Apache-2.0) | Direct fetch only — many sites block browser CORS access; you'll get a clear message and can paste the text instead. No proxy is used (privacy) |
+| **Plain text / paste** | Native, BOM-aware decoding | UTF-8/UTF-16 |
+
+**Quality gate** (statistical, zero AI): raw-PDF-syntax leak → rejected;
+corrupted encoding → rejected; symbol soup → rejected; legacy non-Unicode
+font mojibake (the classic old Tamil PDF trap) → imported **with a spoken
+warning**. Vendor libraries load lazily per format and are pinned by
+SHA-256 in the test suite.
 
 ## 🚀 Running the app
 
@@ -87,10 +110,11 @@ npm install && npm test   # additionally activates the jsdom integration suite
 
 | Suite | Guards |
 |---|---|
-| `tests/unit/` | Sentence/paragraph parsing (EN + தமிழ் + danda), stores, stats, progress, truncation |
-| `tests/offline/` | Every precached file exists; **zero external network references** in shipped code; no fetch/XHR in core |
+| `tests/unit/` | Sentence/paragraph parsing (EN + தமிழ் + danda), stores, stats, progress, truncation; **documents**: signature routing, BOM decoding, quality gate, PDF line reconstruction, zip sniffing |
+| `tests/fixtures/` | Committed micro-fixtures: text-layer PDF, scanned-style PDF, fake-PDF text, plain text |
+| `tests/offline/` | Every precached file exists; **zero AUTOMATIC external network references** (the one sanctioned fetch lives only in `urlAdapter.js` — the explicit URL-import feature); **vendored libraries pinned by SHA-256** |
 | `tests/accessibility/` | Live regions, dialog labels, named buttons, labeled controls, themes, focus, 44px targets |
-| `tests/integration/` | Full boot → play → pause → navigate → resume → finish under jsdom with a mocked speech engine |
+| `tests/integration/` | Full boot → play/pause/navigate/resume/finish; **import workflows**: valid PDF → reader → resume, damaged + password PDF errors, EPUB spine extraction, gate rejections — none enter the library |
 
 The offline suite is what keeps the **₹0 operating model an architectural
 requirement**: if anyone ever adds an external script or fetch, tests go red.
@@ -141,6 +165,9 @@ vasi-vasi/
 │   ├── base.css                # Reset, typography, buttons, forms, dialogs
 │   ├── layout.css              # Shell, header, views, footer
 │   └── components.css          # Doc cards, player, highlights, settings
+├── vendor/                    # Pinned parser libraries (see NOTICE.md for licenses)
+│   ├── pdfjs/                 # pdf.min.js + worker + cMaps + standard fonts
+│   ├── jszip/  ├── mammoth/  └── readability/
 └── src/
     ├── config.js               # Storage keys, limits, reading constants, defaults
     ├── util.js                 # Emitter, uid, language detection, estimates
@@ -150,6 +177,15 @@ vasi-vasi/
     │   ├── storage.js          # Safe localStorage wrapper (memory fallback)
     │   ├── settingsStore.js    # Theme/voice/speed settings + pub-sub
     │   └── libraryStore.js     # Document CRUD + reading progress
+    ├── documents/
+    │   ├── importManager.js    # Byte-signature routing + quality-gate gatekeeping
+    │   ├── qualityGate.js      # Statistical accept/warn/reject checks
+    │   ├── pdfAdapter.js       # pdf.js extraction (geometry line rebuild, dehyphenation)
+    │   ├── docxAdapter.js      # Mammoth → HTML → paragraphs
+    │   ├── epubAdapter.js      # JSZip + OPF spine → chapters
+    │   ├── urlAdapter.js       # Fetch + Readability (CORS-honest)
+    │   ├── textBlocks.js       # Shared HTML → reading-order paragraphs
+    │   └── vendorLoader.js     # Lazy, cached loading of vendored libraries
     ├── core/
     │   ├── announcer.js        # aria-live announcements for screen readers
     │   ├── documentParser.js   # Text → paragraphs → sentences (Intl.Segmenter)

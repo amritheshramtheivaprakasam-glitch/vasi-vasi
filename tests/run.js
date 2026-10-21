@@ -7,6 +7,8 @@ const path = require('path');
 const suites = [
   'unit/documentParser.test.js',
   'unit/stores.test.js',
+  'unit/documents.test.js',
+  'unit/pdfFixture.test.js',
   'offline/sw-shell.test.js',
   'accessibility/markup.test.js',
   'integration/app.smoke.test.js'

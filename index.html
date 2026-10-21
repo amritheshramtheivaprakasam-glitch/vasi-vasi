@@ -54,10 +54,14 @@
           </div>
           <div class="view-actions">
             <button type="button" id="btn-add-text" class="btn btn-primary">＋ Add text</button>
-            <button type="button" id="btn-import-file" class="btn btn-secondary">📄 Import .txt file</button>
-            <input type="file" id="file-input" accept=".txt,.md,.text,text/plain" hidden aria-hidden="true">
+            <button type="button" id="btn-import-file" class="btn btn-secondary">📄 Import file</button>
+            <button type="button" id="btn-import-url" class="btn btn-secondary">🔗 From web URL</button>
+            <input type="file" id="file-input"
+                   accept=".txt,.md,.text,.pdf,.docx,.epub,text/plain,application/pdf,application/epub+zip,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                   hidden aria-hidden="true">
           </div>
         </div>
+        <p id="import-status" class="hint" role="status" aria-live="polite"></p>
 
         <ul id="doc-list" class="doc-list" aria-label="Documents in your library"></ul>
 
@@ -255,6 +259,7 @@
       </table>
       <h3>Tips</h3>
       <ul class="tip-list">
+        <li>Import PDF, DOCX, EPUB, plain text, or a web article — everything is processed on your device.</li>
         <li>Click any sentence in the document to start reading from there.</li>
         <li>The current sentence is highlighted, and each word lights up as it is spoken (in supported browsers).</li>
         <li>Voices come from your device. On Windows and Android you can add Tamil voices in system settings.</li>
@@ -263,6 +268,26 @@
       </ul>
       <menu class="dialog-actions">
         <button type="submit" class="btn btn-primary" value="done">Close</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <!-- ============================== URL IMPORT DIALOG ============================== -->
+  <dialog id="dlg-url" class="dialog" aria-labelledby="url-title">
+    <form method="dialog" class="dialog-body" id="url-form">
+      <h2 id="url-title">Import from a web address</h2>
+      <div class="form-col">
+        <label for="url-input">Page address (URL)</label>
+        <input type="url" id="url-input" placeholder="https://example.com/article" required>
+        <p class="hint">The article text is read by your browser and stays on your device.
+          Some websites block direct browser access — if that happens, copy the article
+          text and use <strong>Add text</strong> instead.</p>
+      </div>
+      <p id="url-status" class="hint" role="status"></p>
+      <p id="url-error" class="form-error" role="alert" hidden></p>
+      <menu class="dialog-actions">
+        <button type="button" id="btn-url-cancel" class="btn btn-ghost">Cancel</button>
+        <button type="submit" class="btn btn-primary" value="import">Import &amp; read</button>
       </menu>
     </form>
   </dialog>
@@ -297,6 +322,14 @@
   <script src="src/core/documentParser.js"></script>
   <script src="src/core/speechEngine.js"></script>
   <script src="src/core/readerEngine.js"></script>
+  <script src="src/documents/vendorLoader.js"></script>
+  <script src="src/documents/qualityGate.js"></script>
+  <script src="src/documents/textBlocks.js"></script>
+  <script src="src/documents/pdfAdapter.js"></script>
+  <script src="src/documents/docxAdapter.js"></script>
+  <script src="src/documents/epubAdapter.js"></script>
+  <script src="src/documents/urlAdapter.js"></script>
+  <script src="src/documents/importManager.js"></script>
   <script src="src/ui/shortcuts.js"></script>
   <script src="src/ui/dialogs.js"></script>
   <script src="src/ui/libraryView.js"></script>
