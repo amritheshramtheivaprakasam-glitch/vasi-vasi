@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Vasi Vasi logo">
+  <rect width="512" height="512" rx="96" fill="#8a3a0f"/>
+  <path d="M96 170c42-22 84-22 126 0v196c-42-22-84-22-126 0z" fill="#fff7ed"/>
+  <path d="M416 170c-42-22-84-22-126 0v196c42-22 84-22 126 0z" fill="#ffe3c4"/>
+  <rect x="249" y="152" width="14" height="224" rx="7" fill="#8a3a0f"/>
+  <path d="M256 96c10 14 10 26 0 40c-10-14-10-26 0-40z" fill="#ffe9c2"/>
+  <path d="M210 108c13 9 18 20 15 35c-13-9-18-20-15-35z" fill="#ffcf91"/>
+  <path d="M302 108c-13 9-18 20-15 35c13-9 18-20 15-35z" fill="#ffcf91"/>
+</svg>

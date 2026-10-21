@@ -1,0 +1,22 @@
+{
+  "name": "vasi-vasi",
+  "version": "0.1.0-rc.1",
+  "description": "வாசி வாசி — a free, fully offline, no-AI reading companion for blind and low-vision readers.",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "test": "node tests/run.js",
+    "test:unit": "node tests/unit/documentParser.test.js && node tests/unit/stores.test.js",
+    "test:offline": "node tests/offline/sw-shell.test.js",
+    "test:a11y": "node tests/accessibility/markup.test.js",
+    "test:integration": "node tests/integration/app.smoke.test.js",
+    "serve": "python3 -m http.server 8000"
+  },
+  "devDependencies": {
+    "jsdom": "^24.1.0"
+  },
+  "comments": {
+    "zero-cost-guarantee": "The shipped app has ZERO runtime dependencies and needs no npm install, no build step and no server code. npm is used only for the optional integration test suite (jsdom).",
+    "reproducibility": "Runtime behavior is fully defined by the static files in this repository; tests pin the only dev dependency via package-lock.json."
+  }
+}

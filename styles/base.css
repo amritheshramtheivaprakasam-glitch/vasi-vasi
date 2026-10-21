@@ -1,0 +1,149 @@
+/* ============================================================
+   Vasi Vasi — base styles: reset, typography, accessibility
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { color-scheme: light; }
+[data-theme="dark"] { color-scheme: dark; }
+[data-theme="contrast"] { color-scheme: dark; }
+
+body {
+  margin: 0;
+  font-family: var(--ff-sans);
+  font-size: var(--fs-base);
+  line-height: 1.6;
+  background: var(--bg);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 { line-height: 1.25; margin: 0 0 var(--sp-3); }
+p { margin: 0 0 var(--sp-3); }
+a { color: var(--link); }
+code { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; font-size: .9em; }
+kbd {
+  font-family: var(--ff-sans);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-bottom-width: 3px;
+  border-radius: var(--radius-s);
+  padding: 0.1em 0.5em;
+  font-weight: 700;
+}
+
+/* Strong, always-visible focus — critical for low-vision keyboard users */
+:focus { outline: none; }
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-s);
+}
+
+/* Buttons */
+.btn {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.55rem 1.1rem;
+  font: inherit;
+  font-weight: 700;
+  border: 1px solid transparent;
+  border-radius: var(--radius-m);
+  cursor: pointer;
+  background: var(--secondary-bg);
+  color: var(--secondary-ink);
+  text-decoration: none;
+}
+.btn:hover { filter: brightness(0.97); }
+.btn:active { transform: translateY(1px); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn-primary { background: var(--primary); color: var(--primary-ink); }
+.btn-primary:hover { background: var(--primary-hover); filter: none; }
+.btn-secondary { background: var(--secondary-bg); color: var(--secondary-ink); border-color: var(--border); }
+.btn-ghost { background: transparent; color: var(--ink); border-color: var(--border); }
+.btn-danger { background: var(--danger); color: var(--danger-ink); }
+
+/* Form controls */
+input[type="text"], select.select, textarea {
+  font: inherit;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  padding: 0.55rem 0.75rem;
+  width: 100%;
+}
+textarea { resize: vertical; line-height: 1.6; }
+input[type="range"] { accent-color: var(--primary); }
+input[type="range"].progress-range { width: 100%; min-height: 44px; }
+input[type="checkbox"], input[type="radio"] { width: 1.3rem; height: 1.3rem; accent-color: var(--primary); }
+
+/* Dialogs */
+.dialog {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-l);
+  background: var(--surface);
+  color: var(--ink);
+  width: min(92vw, 40rem);
+  max-height: 88vh;
+  overflow: auto;
+  padding: 0;
+  box-shadow: var(--shadow);
+}
+.dialog::backdrop { background: rgba(0, 0, 0, 0.55); }
+.dialog-body { padding: var(--sp-5) var(--sp-6); }
+.dialog-small { width: min(92vw, 26rem); }
+.dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  justify-content: flex-end;
+  padding: 0;
+  margin: var(--sp-5) 0 0;
+}
+
+/* Utility: visually hidden but available to screen readers */
+.sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--sp-4);
+  top: -4rem;
+  z-index: 100;
+  background: var(--primary);
+  color: var(--primary-ink);
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--radius-m);
+  font-weight: 700;
+  transition: top 0.15s ease;
+}
+.skip-link:focus { top: var(--sp-2); color: var(--primary-ink); }
+
+.hint { font-size: 0.95rem; color: var(--ink-soft); margin: var(--sp-2) 0 0; }
+.form-error { color: var(--danger); font-weight: 700; margin: var(--sp-3) 0 0; }
+
+fieldset.fieldset {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  padding: var(--sp-4);
+  margin: var(--sp-4) 0;
+}
+fieldset.fieldset legend { font-weight: 700; padding: 0 var(--sp-2); }
+
+@media (prefers-reduced-motion: reduce) {
+  * { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+}

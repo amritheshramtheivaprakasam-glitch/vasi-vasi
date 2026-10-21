@@ -1,0 +1,28 @@
+{
+  "name": "Vasi Vasi — Offline Reading Companion",
+  "short_name": "Vasi Vasi",
+  "description": "A fully offline reading companion that reads any text aloud for blind and low-vision readers.",
+  "lang": "en",
+  "dir": "ltr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#faf6ef",
+  "theme_color": "#8a3a0f",
+  "categories": ["accessibility", "education", "books"],
+  "icons": [
+    {
+      "src": "assets/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icons/icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Vasi Vasi — a free, fully offline reading companion that reads any text aloud for blind and low-vision readers. No accounts, no cloud, no AI services.">
+  <meta name="theme-color" content="#8a3a0f">
+  <title>Vasi Vasi — Offline Reading Companion</title>
+  <link rel="icon" type="image/svg+xml" href="assets/icons/icon.svg">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles/tokens.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/layout.css">
+  <link rel="stylesheet" href="styles/components.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  <div class="app-shell">
+
+    <header class="app-header">
+      <div class="header-inner">
+        <p class="brand">
+          <img class="brand-mark" src="assets/icons/icon.svg" alt="" width="46" height="46" aria-hidden="true">
+          <span class="brand-text">
+            <span class="brand-name">வாசி வாசி <span class="brand-roman">· Vasi Vasi</span></span>
+            <span class="brand-tag">Offline reading companion for blind &amp; low-vision readers</span>
+          </span>
+        </p>
+        <nav class="header-actions" aria-label="App actions">
+          <button type="button" id="btn-home" class="btn btn-ghost" hidden>⌂ Library</button>
+          <button type="button" id="btn-support" class="btn btn-ghost">♥ Support</button>
+          <button type="button" id="btn-settings" class="btn btn-ghost">⚙ Settings</button>
+          <button type="button" id="btn-help" class="btn btn-ghost">? Help</button>
+        </nav>
+      </div>
+      <p id="no-speech-banner" class="banner banner-warning" role="alert" hidden>
+        This browser does not support speech synthesis, so Vasi Vasi cannot read aloud here.
+        The library still works — please try Chrome, Edge, Firefox, or Safari for audio.
+      </p>
+    </header>
+
+    <main id="main-content" class="app-main" tabindex="-1">
+
+      <!-- ============================== LIBRARY VIEW ============================== -->
+      <section id="view-library" class="view" aria-labelledby="library-heading">
+        <div class="view-head">
+          <div>
+            <h1 id="library-heading" class="view-title" tabindex="-1">My Library</h1>
+            <p class="view-sub">
+              Your texts stay on this device only. Add something, press <strong>Read</strong>,
+              and Vasi Vasi will read it aloud — sentence by sentence.
+            </p>
+          </div>
+          <div class="view-actions">
+            <button type="button" id="btn-add-text" class="btn btn-primary">＋ Add text</button>
+            <button type="button" id="btn-import-file" class="btn btn-secondary">📄 Import .txt file</button>
+            <input type="file" id="file-input" accept=".txt,.md,.text,text/plain" hidden aria-hidden="true">
+          </div>
+        </div>
+
+        <ul id="doc-list" class="doc-list" aria-label="Documents in your library"></ul>
+
+        <div id="library-empty" class="empty-state" hidden>
+          <p class="empty-icon" aria-hidden="true">📖</p>
+          <h2>Your library is empty</h2>
+          <p>Paste any text — a newspaper article, a lesson, a letter — or import a
+            <code>.txt</code> file, and Vasi Vasi will read it to you.</p>
+        </div>
+      </section>
+
+      <!-- ============================== READER VIEW ============================== -->
+      <section id="view-reader" class="view" aria-labelledby="reader-heading" hidden>
+        <button type="button" id="btn-back" class="btn btn-ghost btn-back">← Back to library</button>
+
+        <div class="reader-head">
+          <h1 id="reader-heading" class="view-title" tabindex="-1"></h1>
+          <p class="view-sub" id="reader-meta"></p>
+        </div>
+
+        <div class="player" role="region" aria-label="Audio player">
+          <div class="player-main" role="toolbar" aria-label="Playback controls">
+            <button type="button" id="btn-prev-para" class="btn btn-secondary btn-ctl"
+                    aria-label="Previous paragraph (Shift + Left arrow)">⏮<span class="ctl-label">Para</span></button>
+            <button type="button" id="btn-prev-sentence" class="btn btn-secondary btn-ctl"
+                    aria-label="Previous sentence (Left arrow)">◀<span class="ctl-label">Sentence</span></button>
+            <button type="button" id="btn-play" class="btn btn-primary btn-play" aria-pressed="false"
+                    aria-label="Play (Space bar)">
+              <span class="play-icon" aria-hidden="true">▶</span>
+              <span class="play-label">Play</span>
+            </button>
+            <button type="button" id="btn-next-sentence" class="btn btn-secondary btn-ctl"
+                    aria-label="Next sentence (Right arrow)">▶<span class="ctl-label">Sentence</span></button>
+            <button type="button" id="btn-next-para" class="btn btn-secondary btn-ctl"
+                    aria-label="Next paragraph (Shift + Right arrow)">⏭<span class="ctl-label">Para</span></button>
+            <button type="button" id="btn-stop" class="btn btn-ghost btn-ctl"
+                    aria-label="Stop and return to the beginning">⏹<span class="ctl-label">Stop</span></button>
+          </div>
+
+          <div class="player-secondary" role="toolbar" aria-label="Speed, voice and timer">
+            <div class="ctl-group" role="group" aria-label="Reading speed">
+              <button type="button" id="btn-rate-down" class="btn btn-ghost btn-mini" aria-label="Slower">−</button>
+              <output id="rate-display" class="rate-display" aria-live="off">1.0×</output>
+              <button type="button" id="btn-rate-up" class="btn btn-ghost btn-mini" aria-label="Faster">＋</button>
+            </div>
+            <div class="ctl-group">
+              <label for="voice-select" class="sr-only">Voice</label>
+              <select id="voice-select" class="select"></select>
+            </div>
+            <div class="ctl-group">
+              <label for="sleep-select" class="ctl-inline-label">💤 Sleep timer</label>
+              <select id="sleep-select" class="select">
+                <option value="0">Off</option>
+                <option value="5">5 min</option>
+                <option value="10">10 min</option>
+                <option value="15">15 min</option>
+                <option value="30">30 min</option>
+                <option value="45">45 min</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="player-progress">
+            <input type="range" id="progress-range" class="progress-range" min="0" max="0" step="1" value="0"
+                   aria-label="Reading position in sentences">
+            <p id="position-text" class="position-text"></p>
+          </div>
+        </div>
+
+        <article id="reader-content" class="reader-content" tabindex="0"
+                 aria-label="Document text. Click any sentence to read from there."></article>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <p>
+        Vasi Vasi runs <strong>100% on your device</strong> — no accounts, no internet needed,
+        no cloud and no AI services. Your texts never leave your phone or computer.
+      </p>
+    </footer>
+  </div>
+
+  <!-- ============================== SETTINGS DIALOG ============================== -->
+  <dialog id="dlg-settings" class="dialog" aria-labelledby="settings-title">
+    <form method="dialog" class="dialog-body" id="settings-form">
+      <h2 id="settings-title">Settings</h2>
+
+      <fieldset class="fieldset">
+        <legend>Appearance</legend>
+        <div class="radio-cards" role="radiogroup" aria-label="Theme">
+          <label class="radio-card"><input type="radio" name="theme" value="auto"> <span>Auto<small>Follow device</small></span></label>
+          <label class="radio-card"><input type="radio" name="theme" value="light"> <span>Light<small>Warm paper</small></span></label>
+          <label class="radio-card"><input type="radio" name="theme" value="dark"> <span>Dark<small>Night reading</small></span></label>
+          <label class="radio-card"><input type="radio" name="theme" value="contrast"> <span>High contrast<small>Maximum visibility</small></span></label>
+        </div>
+        <div class="form-row">
+          <label for="set-font-scale">Reading text size</label>
+          <input type="range" id="set-font-scale" min="0.9" max="2" step="0.05">
+          <output id="set-font-scale-out">A</output>
+        </div>
+        <div class="form-row">
+          <label for="set-font-family">Reading font</label>
+          <select id="set-font-family" class="select">
+            <option value="sans">Sans serif (clear)</option>
+            <option value="serif">Serif (book style)</option>
+          </select>
+        </div>
+      </fieldset>
+
+      <fieldset class="fieldset">
+        <legend>Voice &amp; speed</legend>
+        <div class="form-row">
+          <label for="set-voice">Default voice</label>
+          <select id="set-voice" class="select"></select>
+        </div>
+        <div class="form-row">
+          <label for="set-rate">Reading speed</label>
+          <input type="range" id="set-rate" min="0.5" max="2" step="0.1">
+          <output id="set-rate-out">1.0×</output>
+        </div>
+        <div class="form-row">
+          <label for="set-pitch">Voice pitch</label>
+          <input type="range" id="set-pitch" min="0.5" max="2" step="0.05">
+          <output id="set-pitch-out">1.0</output>
+        </div>
+        <div class="form-row">
+          <label for="set-volume">Volume</label>
+          <input type="range" id="set-volume" min="0.1" max="1" step="0.1">
+          <output id="set-volume-out">100%</output>
+        </div>
+        <label class="check-row">
+          <input type="checkbox" id="set-resume">
+          Remember where I stopped and continue from there
+        </label>
+      </fieldset>
+
+      <menu class="dialog-actions">
+        <button type="button" id="btn-reset-settings" class="btn btn-ghost">Reset defaults</button>
+        <button type="submit" class="btn btn-primary" value="done">Done</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <!-- ============================== ADD TEXT DIALOG ============================== -->
+  <dialog id="dlg-add" class="dialog" aria-labelledby="add-title-heading">
+    <form method="dialog" class="dialog-body" id="add-form">
+      <h2 id="add-title-heading">Add text to read</h2>
+      <div class="form-col">
+        <label for="add-title">Title</label>
+        <input type="text" id="add-title" maxlength="120" placeholder="e.g. Today's newspaper article" required>
+      </div>
+      <div class="form-col">
+        <label for="add-text">Text</label>
+        <textarea id="add-text" rows="12" placeholder="Paste the text you want Vasi Vasi to read aloud…" required></textarea>
+        <p class="hint">Any language works — including தமிழ். Blank lines separate paragraphs.</p>
+      </div>
+      <p id="add-error" class="form-error" role="alert" hidden></p>
+      <menu class="dialog-actions">
+        <button type="button" id="btn-add-cancel" class="btn btn-ghost">Cancel</button>
+        <button type="submit" class="btn btn-secondary" value="save">Save to library</button>
+        <button type="submit" class="btn btn-primary" value="read">Save &amp; read now</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <!-- ============================== CONFIRM DIALOG ============================== -->
+  <dialog id="dlg-confirm" class="dialog dialog-small" aria-labelledby="confirm-title">
+    <form method="dialog" class="dialog-body">
+      <h2 id="confirm-title">Are you sure?</h2>
+      <p id="confirm-message"></p>
+      <menu class="dialog-actions">
+        <button type="submit" class="btn btn-ghost" value="cancel">Cancel</button>
+        <button type="submit" class="btn btn-danger" id="confirm-ok" value="ok">Delete</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <!-- ============================== HELP DIALOG ============================== -->
+  <dialog id="dlg-help" class="dialog" aria-labelledby="help-title">
+    <form method="dialog" class="dialog-body">
+      <h2 id="help-title">Help — how to use Vasi Vasi</h2>
+      <p>Vasi Vasi reads any text aloud using the voices already installed on your
+        device. Everything works offline; nothing is sent anywhere.</p>
+      <h3>Keyboard shortcuts (while reading)</h3>
+      <table class="shortcut-table">
+        <tbody>
+          <tr><td><kbd>Space</kbd></td><td>Play / Pause</td></tr>
+          <tr><td><kbd>←</kbd> / <kbd>→</kbd></td><td>Previous / next sentence</td></tr>
+          <tr><td><kbd>Shift</kbd> + <kbd>←</kbd> / <kbd>→</kbd></td><td>Previous / next paragraph</td></tr>
+          <tr><td><kbd>↑</kbd> / <kbd>↓</kbd></td><td>Faster / slower</td></tr>
+          <tr><td><kbd>Home</kbd> / <kbd>End</kbd></td><td>First / last sentence</td></tr>
+          <tr><td><kbd>Esc</kbd></td><td>Back to library</td></tr>
+          <tr><td><kbd>?</kbd></td><td>Open this help</td></tr>
+        </tbody>
+      </table>
+      <h3>Tips</h3>
+      <ul class="tip-list">
+        <li>Click any sentence in the document to start reading from there.</li>
+        <li>The current sentence is highlighted, and each word lights up as it is spoken (in supported browsers).</li>
+        <li>Voices come from your device. On Windows and Android you can add Tamil voices in system settings.</li>
+        <li>Your reading position is saved automatically, so you can stop and continue later.</li>
+        <li>Install Vasi Vasi from your browser menu (“Add to home screen” / “Install”) to use it like a regular app, fully offline.</li>
+      </ul>
+      <menu class="dialog-actions">
+        <button type="submit" class="btn btn-primary" value="done">Close</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <!-- ============================== SUPPORT DIALOG ============================== -->
+  <dialog id="dlg-support" class="dialog" aria-labelledby="support-title">
+    <form method="dialog" class="dialog-body">
+      <h2 id="support-title">♥ Support Vasi Vasi</h2>
+      <div class="dialog-body-dynamic"></div>
+      <p id="support-status" class="hint" role="status"></p>
+    </form>
+  </dialog>
+
+  <!-- Live regions for screen-reader announcements -->
+  <p class="sr-only" role="status" id="announcer-polite"></p>
+  <p class="sr-only" role="alert" id="announcer-assertive"></p>
+
+  <noscript>
+    <p style="padding:2rem;font-size:1.25rem;text-align:center">
+      Vasi Vasi needs JavaScript to read text aloud. Please enable JavaScript and reload.
+    </p>
+  </noscript>
+
+  <!-- Load order matters: foundation → services → core engines → UI → bootstrap -->
+  <script src="src/config.js"></script>
+  <script src="src/util.js"></script>
+  <script src="src/content/starterLibrary.js"></script>
+  <script src="src/services/storage.js"></script>
+  <script src="src/services/settingsStore.js"></script>
+  <script src="src/services/libraryStore.js"></script>
+  <script src="src/core/announcer.js"></script>
+  <script src="src/core/documentParser.js"></script>
+  <script src="src/core/speechEngine.js"></script>
+  <script src="src/core/readerEngine.js"></script>
+  <script src="src/ui/shortcuts.js"></script>
+  <script src="src/ui/dialogs.js"></script>
+  <script src="src/ui/libraryView.js"></script>
+  <script src="src/ui/readerView.js"></script>
+  <script src="src/support/supportConfig.js"></script>
+  <script src="src/support/supportDialog.js"></script>
+  <script src="src/main.js"></script>
+</body>
+</html>

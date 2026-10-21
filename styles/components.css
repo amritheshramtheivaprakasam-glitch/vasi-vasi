@@ -1,0 +1,214 @@
+/* ============================================================
+   Vasi Vasi — components: doc cards, player, highlights, dialogs
+   ============================================================ */
+
+/* ---------- Library document cards ---------- */
+.doc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--sp-3);
+}
+.doc-card {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  align-items: center;
+  justify-content: space-between;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-l);
+  padding: var(--sp-4);
+  box-shadow: var(--shadow);
+}
+.doc-title { font-size: 1.2rem; margin: 0 0 var(--sp-1); overflow-wrap: anywhere; }
+.doc-meta {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  align-items: center;
+}
+.chip {
+  display: inline-block;
+  padding: 0.05rem 0.6rem;
+  border-radius: var(--radius-full);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+.chip-progress { background: var(--hl-bg); color: var(--hl-ink); border-color: transparent; }
+.doc-actions { display: flex; gap: var(--sp-2); flex-wrap: wrap; }
+
+.empty-state {
+  text-align: center;
+  padding: var(--sp-8) var(--sp-4);
+  color: var(--ink-soft);
+}
+.empty-icon { font-size: 3rem; margin: 0 0 var(--sp-3); }
+
+/* ---------- Player ---------- */
+.player {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-l);
+  box-shadow: var(--shadow);
+  padding: var(--sp-3) var(--sp-4);
+}
+.player-main {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  align-items: center;
+  justify-content: center;
+}
+.btn-ctl {
+  flex-direction: column;
+  gap: 0;
+  padding: var(--sp-2) var(--sp-3);
+  font-size: 1.15rem;
+  line-height: 1.1;
+}
+.ctl-label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; }
+.btn-play {
+  min-width: 7.5rem;
+  min-height: 4rem;
+  font-size: 1.35rem;
+  border-radius: var(--radius-full);
+}
+.play-icon { font-size: 1.4rem; }
+
+.player-secondary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3) var(--sp-4);
+  align-items: center;
+  justify-content: center;
+  margin-top: var(--sp-3);
+  padding-top: var(--sp-3);
+  border-top: 1px dashed var(--border);
+}
+.ctl-group { display: flex; align-items: center; gap: var(--sp-2); }
+.ctl-inline-label { font-size: 0.9rem; font-weight: 700; color: var(--ink-soft); white-space: nowrap; }
+.btn-mini { min-height: 40px; min-width: 40px; padding: 0; font-size: 1.3rem; }
+.rate-display {
+  min-width: 3.2rem;
+  text-align: center;
+  font-weight: 800;
+  font-size: 1.05rem;
+}
+.player-secondary .select { width: auto; min-height: 44px; max-width: 100%; }
+
+.player-progress { margin-top: var(--sp-3); }
+.position-text {
+  margin: 0;
+  text-align: center;
+  font-weight: 700;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Reading highlight ---------- */
+.sentence { border-radius: var(--radius-s); transition: background-color 0.15s ease; }
+.sentence.played { color: var(--played-ink); }
+.sentence.active {
+  background: var(--hl-bg);
+  color: var(--hl-ink);
+  box-shadow: 0 0 0 3px var(--hl-bg);
+}
+.reader-content[data-clickable="true"] .sentence { cursor: pointer; }
+.w.active {
+  background: var(--mark-bg);
+  color: var(--mark-ink);
+  border-radius: var(--radius-s);
+}
+
+/* ---------- Dialogs ---------- */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 10rem 3.5rem;
+  gap: var(--sp-3);
+  align-items: center;
+  margin: var(--sp-3) 0;
+}
+.form-row label { font-weight: 600; }
+.form-row output { font-weight: 800; text-align: right; }
+.form-row .select { grid-column: 2 / 4; }
+.form-col { display: flex; flex-direction: column; gap: var(--sp-2); margin: var(--sp-3) 0; }
+.form-col > label { font-weight: 700; }
+.check-row { display: flex; gap: var(--sp-3); align-items: center; margin: var(--sp-3) 0; font-weight: 600; }
+
+.radio-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr)); gap: var(--sp-2); }
+.radio-card {
+  display: flex;
+  gap: var(--sp-2);
+  align-items: flex-start;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  padding: var(--sp-3);
+  background: var(--surface);
+  cursor: pointer;
+  font-weight: 700;
+}
+.radio-card small { display: block; font-weight: 400; color: var(--ink-soft); }
+.radio-card:has(:checked) { border-color: var(--primary); box-shadow: 0 0 0 2px var(--primary); }
+
+.shortcut-table { width: 100%; border-collapse: collapse; margin-bottom: var(--sp-4); }
+.shortcut-table td { padding: var(--sp-2); border-bottom: 1px solid var(--border); }
+.shortcut-table td:first-child { white-space: nowrap; width: 40%; }
+.tip-list { padding-left: 1.25rem; }
+.tip-list li { margin-bottom: var(--sp-2); }
+
+#set-font-scale-out { font-size: calc(1.2rem * var(--preview-scale, 1)); }
+
+/* ---------- Support dialog ---------- */
+.support-tiers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: var(--sp-2);
+  margin: var(--sp-4) 0;
+}
+.support-tier {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  padding: var(--sp-3);
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+.support-amount { font-size: 1.35rem; font-weight: 800; color: var(--primary); }
+.support-what { color: var(--ink-soft); font-size: 0.92rem; }
+.support-inst {
+  border-top: 1px dashed var(--border);
+  margin-top: var(--sp-4);
+  padding-top: var(--sp-3);
+}
+.support-inst h3 { font-size: 1.1rem; }
+.copy-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+}
+.copy-row code {
+  font-size: 1rem;
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-s);
+}
+
+@media (max-width: 34rem) {
+  .form-row { grid-template-columns: 1fr; gap: var(--sp-1); }
+  .dialog-body { padding: var(--sp-4); }
+  .player { position: static; }
+  .btn-play { min-width: 6.5rem; }
+}
