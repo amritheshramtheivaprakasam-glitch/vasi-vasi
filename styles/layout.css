@@ -1,0 +1,99 @@
+/* ============================================================
+   Vasi Vasi — layout: shell, header, views, footer
+   ============================================================ */
+
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.header-inner {
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: var(--sp-3) var(--sp-4);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin: 0;
+}
+.brand-mark { border-radius: var(--radius-m); flex-shrink: 0; }
+.brand-text { display: flex; flex-direction: column; }
+.brand-name { font-size: 1.3rem; font-weight: 800; line-height: 1.2; }
+.brand-roman { font-weight: 600; color: var(--ink-soft); font-size: 1.05rem; }
+.brand-tag { font-size: 0.85rem; color: var(--ink-soft); }
+
+.header-actions { display: flex; gap: var(--sp-2); flex-wrap: wrap; }
+
+.banner {
+  margin: 0;
+  padding: var(--sp-3) var(--sp-4);
+  text-align: center;
+  font-weight: 600;
+}
+.banner-warning { background: var(--warning-bg); color: var(--warning-ink); }
+
+.app-main {
+  flex: 1;
+  width: 100%;
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: var(--sp-5) var(--sp-4) var(--sp-8);
+}
+
+.view-head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: var(--sp-5);
+}
+.view-title { font-size: 1.75rem; }
+.view-sub { color: var(--ink-soft); max-width: 42rem; margin: 0; }
+.view-actions { display: flex; gap: var(--sp-3); flex-wrap: wrap; }
+
+.app-footer {
+  border-top: 1px solid var(--border);
+  padding: var(--sp-4);
+  text-align: center;
+}
+.app-footer p {
+  margin: 0 auto;
+  max-width: 46rem;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+/* Reader */
+.btn-back { margin-bottom: var(--sp-3); }
+.reader-head { margin-bottom: var(--sp-4); }
+
+.reader-content {
+  margin-top: var(--sp-5);
+  max-width: 70ch;
+  font-family: var(--reader-ff);
+  font-size: calc(1.2rem * var(--reader-font-scale));
+  line-height: 1.85;
+}
+.reader-content p { margin: 0 0 1.25em; }
+
+@media (max-width: 40rem) {
+  .header-inner { justify-content: center; text-align: center; }
+  .brand { flex-direction: row; text-align: left; }
+  .header-actions { justify-content: center; }
+  .view-head { align-items: stretch; }
+  .view-actions .btn { flex: 1 1 auto; }
+}

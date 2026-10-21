@@ -1,0 +1,149 @@
+/* ============================================================
+   Vasi Vasi — design tokens
+   All colors, spacing, typography scale and theme definitions.
+   Themes are applied via [data-theme] on <html>.
+   ============================================================ */
+
+:root {
+  /* Typography */
+  --ff-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Nirmala UI", "Latha",
+    "Noto Sans", "Noto Sans Tamil", "Tamil MN", Arial, sans-serif;
+  --ff-serif: Georgia, "Nirmala UI", "Noto Serif", "Noto Serif Tamil", "Times New Roman", serif;
+  --fs-base: 1.125rem;
+  --reader-font-scale: 1.1;
+  --reader-ff: var(--ff-sans);
+
+  /* Spacing scale */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.5rem;
+  --sp-6: 2rem;
+  --sp-8: 3rem;
+
+  /* Shape */
+  --radius-s: 0.375rem;
+  --radius-m: 0.625rem;
+  --radius-l: 1rem;
+  --radius-full: 999px;
+
+  /* Light theme (default) — warm paper palette */
+  --bg: #faf6ef;
+  --surface: #ffffff;
+  --surface-2: #f3ede2;
+  --border: #d9cfc0;
+  --ink: #241e16;
+  --ink-soft: #5b5343;
+  --primary: #8a3a0f;
+  --primary-hover: #6f2f0c;
+  --primary-ink: #ffffff;
+  --secondary-bg: #f3ede2;
+  --secondary-ink: #241e16;
+  --link: #0b5fa5;
+  --focus: #1463c8;
+  --danger: #b42318;
+  --danger-ink: #ffffff;
+  --warning-bg: #fdf0d5;
+  --warning-ink: #5f4302;
+  --shadow: 0 1px 2px rgba(36, 30, 22, 0.08), 0 4px 16px rgba(36, 30, 22, 0.08);
+  /* Reading highlight */
+  --hl-bg: #ffe9c2;
+  --hl-ink: #241e16;
+  --mark-bg: #8a3a0f;
+  --mark-ink: #ffffff;
+  --played-ink: #8a8172;
+}
+
+/* Dark theme */
+[data-theme="dark"] {
+  --bg: #14110d;
+  --surface: #241f18;
+  --surface-2: #2f2920;
+  --border: #443b2f;
+  --ink: #f5eee2;
+  --ink-soft: #c9bfaf;
+  --primary: #f2a65a;
+  --primary-hover: #ffc584;
+  --primary-ink: #241505;
+  --secondary-bg: #2f2920;
+  --secondary-ink: #f5eee2;
+  --link: #8fc1ff;
+  --focus: #ffb020;
+  --danger: #ff8a7a;
+  --danger-ink: #241505;
+  --warning-bg: #3d2e07;
+  --warning-ink: #ffdf9e;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 16px rgba(0, 0, 0, 0.35);
+  --hl-bg: #4a3410;
+  --hl-ink: #ffe9c2;
+  --mark-bg: #f2a65a;
+  --mark-ink: #241505;
+  --played-ink: #8f8574;
+}
+
+/* Auto = follow the device preference */
+@media (prefers-color-scheme: dark) {
+  [data-theme="auto"] {
+    --bg: #14110d;
+    --surface: #241f18;
+    --surface-2: #2f2920;
+    --border: #443b2f;
+    --ink: #f5eee2;
+    --ink-soft: #c9bfaf;
+    --primary: #f2a65a;
+    --primary-hover: #ffc584;
+    --primary-ink: #241505;
+    --secondary-bg: #2f2920;
+    --secondary-ink: #f5eee2;
+    --link: #8fc1ff;
+    --focus: #ffb020;
+    --danger: #ff8a7a;
+    --danger-ink: #241505;
+    --warning-bg: #3d2e07;
+    --warning-ink: #ffdf9e;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 16px rgba(0, 0, 0, 0.35);
+    --hl-bg: #4a3410;
+    --hl-ink: #ffe9c2;
+    --mark-bg: #f2a65a;
+    --mark-ink: #241505;
+    --played-ink: #8f8574;
+  }
+}
+
+/* High contrast — for low vision. Maximum separation, thick outlines. */
+[data-theme="contrast"] {
+  --bg: #000000;
+  --surface: #000000;
+  --surface-2: #1a1a00;
+  --border: #ffff00;
+  --ink: #ffff00;
+  --ink-soft: #ffffff;
+  --primary: #ffff00;
+  --primary-hover: #ffffff;
+  --primary-ink: #000000;
+  --secondary-bg: #000000;
+  --secondary-ink: #ffff00;
+  --link: #66ffff;
+  --focus: #ffffff;
+  --danger: #ff6666;
+  --danger-ink: #000000;
+  --warning-bg: #1a1a00;
+  --warning-ink: #ffff00;
+  --shadow: none;
+  --hl-bg: #003300;
+  --hl-ink: #ffff00;
+  --mark-bg: #ffff00;
+  --mark-ink: #000000;
+  --played-ink: #9acd32;
+}
+
+[data-theme="contrast"] .btn,
+[data-theme="contrast"] .doc-card,
+[data-theme="contrast"] .player,
+[data-theme="contrast"] .dialog,
+[data-theme="contrast"] input,
+[data-theme="contrast"] select,
+[data-theme="contrast"] textarea {
+  border-width: 2px;
+}
