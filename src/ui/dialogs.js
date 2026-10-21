@@ -96,6 +96,43 @@
     });
   }
 
+  /* ---------- URL import ---------- */
+
+  function openUrl() {
+    els.urlError.hidden = true;
+    els.urlStatus.textContent = '';
+    els.urlForm.reset();
+    els.dlgUrl.showModal();
+    setTimeout(() => els.urlInput.focus(), 50);
+  }
+
+  function bindUrl() {
+    els.urlCancel.addEventListener('click', () => els.dlgUrl.close());
+    els.urlForm.addEventListener('submit', async (e) => {
+      e.preventDefault(); // keep the dialog open while we work
+      const url = els.urlInput.value.trim();
+      const submitter = els.urlForm.querySelector('button[type="submit"]');
+      submitter.disabled = true;
+      els.urlError.hidden = true;
+      els.urlStatus.textContent = 'Fetching the page…';
+      try {
+        await VV.app.importUrl(url, (p) => {
+          els.urlStatus.textContent =
+            p && p.phase === 'extract' ? 'Extracting the article…' : 'Fetching the page…';
+        });
+        els.dlgUrl.close();
+      } catch (err) {
+        const msg = err && err.userMessage ? err.userMessage : 'That page could not be imported.';
+        els.urlStatus.textContent = '';
+        els.urlError.textContent = msg;
+        els.urlError.hidden = false;
+        VV.announcer.assertive(msg);
+      } finally {
+        submitter.disabled = false;
+      }
+    });
+  }
+
   /* ---------- Confirm (promise-based) ---------- */
 
   function confirmDialog(options) {
@@ -137,6 +174,12 @@
         addText: $('add-text'),
         addError: $('add-error'),
         addCancel: $('btn-add-cancel'),
+        dlgUrl: $('dlg-url'),
+        urlForm: $('url-form'),
+        urlInput: $('url-input'),
+        urlStatus: $('url-status'),
+        urlError: $('url-error'),
+        urlCancel: $('btn-url-cancel'),
         dlgHelp: $('dlg-help')
       });
 
@@ -148,9 +191,11 @@
 
       bindSettings();
       bindAdd();
+      bindUrl();
     },
 
     openAdd,
+    openUrl,
     openHelp() { els.dlgHelp.showModal(); },
     confirm: confirmDialog
   };

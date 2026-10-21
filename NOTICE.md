@@ -2,14 +2,28 @@
 
 ## Third-party code
 
-**None.** The shipped application contains no third-party runtime code,
-no CDN references, no bundled fonts and no copied snippets.
+All application code in `index.html`, `styles/` and `src/` is original,
+written for this project and licensed under the MIT License (see LICENSE).
+All bundled reading samples in `src/content/starterLibrary.js`
+("Welcome to Vasi Vasi", "வைகை ஆற்றின் காலை", "The Lighthouse Keeper")
+are original works written for this project.
 
-- All application code in `index.html`, `styles/` and `src/` is original,
-  written for this project and licensed under the MIT License (see LICENSE).
-- All bundled reading samples in `src/content/starterLibrary.js`
-  ("Welcome to Vasi Vasi", "வைகை ஆற்றின் காலை", "The Lighthouse Keeper")
-  are original works written for this project.
+### Vendored libraries (`vendor/`)
+
+The document-import formats are handled by pinned, locally bundled builds
+of these open-source libraries. They are loaded lazily (only when the
+matching format is imported) and make no network calls themselves:
+
+| Library | Version | License | Used for |
+|---|---|---|---|
+| pdf.js (`pdfjs-dist`, Mozilla) | 3.11.174 | Apache-2.0 | PDF text-layer extraction |
+| JSZip (Stuart Knightley) | 3.10.1 | MIT | EPUB/DOCX container reading |
+| Mammoth.js (Michael Williamson) | 1.8.0 | BSD-2-Clause | DOCX → HTML conversion |
+| Readability.js (Mozilla) | 0.5.0 | Apache-2.0 | Web article extraction |
+
+Each `vendor/<name>/` directory contains the library's own license file.
+No GPL/AGPL code is included, so commercial and institutional distribution
+remains permitted.
 
 ## Platform APIs used (no code included, no licence obligations)
 

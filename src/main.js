@@ -80,10 +80,28 @@
     }
   }
 
-  function addDocument(title, text, source, openNow) {
-    const doc = VV.libraryStore.add(title, text, source);
+  function addDocument(title, text, source, openNow, meta) {
+    const doc = VV.libraryStore.add(title, text, source, meta);
     VV.announcer.polite(`Saved "${title}" to your library.`);
     if (openNow) openDocument(doc.id);
+    return doc;
+  }
+
+  /* Shared import status line (library view, aria-live polite). */
+  function setImportStatus(message) {
+    const el = $('import-status');
+    if (el) el.textContent = message || '';
+  }
+
+  async function importUrl(url, onProgress) {
+    const result = await VV.documentImport.importUrl(url, { onProgress });
+    const doc = addDocument(result.title, result.text, 'url', true, {
+      format: result.format,
+      sourceUrl: result.meta.sourceUrl,
+      siteName: result.meta.siteName,
+      warnings: result.warnings
+    });
+    if (result.warnings.length) VV.announcer.polite(result.warnings.join(' '));
     return doc;
   }
 
@@ -108,6 +126,8 @@
 
     openDocument,
     addDocument,
+    importUrl,
+    setImportStatus,
 
     togglePlayback() {
       if (!speech.supported) return;

@@ -61,9 +61,15 @@
     const s = settingsGetter();
     const labels = { ta: 'தமிழ்', en: 'English' };
     const total = engine ? engine.total : 0;
-    els.meta.textContent =
-      `${labels[engine.doc.lang] || engine.doc.lang} · ${total} sentences · ` +
-      `about ${estimateMinutes(docWordCount, s.rate)} min at current speed`;
+    const m = (engine.doc && engine.doc.meta) || {};
+    const parts = [labels[engine.doc.lang] || engine.doc.lang];
+    if (m.format && m.format !== 'text') parts.push(m.format.toUpperCase());
+    if (m.pageCount) parts.push(`${m.pageCount} pages`);
+    if (m.chapters) parts.push(`${m.chapters} chapters`);
+    if (m.sourceUrl) parts.push('from web');
+    parts.push(`${total} sentences`);
+    parts.push(`about ${estimateMinutes(docWordCount, s.rate)} min at current speed`);
+    els.meta.textContent = parts.join(' · ');
   }
 
   function updatePosition(index, total) {

@@ -31,11 +31,28 @@
     lang.textContent = langLabel(doc.lang);
     meta.appendChild(lang);
 
+    if (doc.meta && doc.meta.format && doc.meta.format !== 'text') {
+      const fmt = document.createElement('span');
+      fmt.className = 'chip';
+      fmt.textContent = doc.meta.format.toUpperCase();
+      meta.appendChild(fmt);
+    }
+
     const info = document.createElement('span');
     const rate = VV.settingsStore.get().rate;
+    const pageInfo = doc.meta && doc.meta.pageCount ? ` · ${doc.meta.pageCount} pages` : '';
+    const chapterInfo = doc.meta && doc.meta.chapters ? ` · ${doc.meta.chapters} chapters` : '';
     info.textContent =
-      `${doc.stats.sentences} sentences · about ${estimateMinutes(doc.stats.words, rate)} min`;
+      `${doc.stats.sentences} sentences${pageInfo}${chapterInfo} · about ${estimateMinutes(doc.stats.words, rate)} min`;
     meta.appendChild(info);
+
+    if (doc.meta && doc.meta.warnings && doc.meta.warnings.length) {
+      const warn = document.createElement('span');
+      warn.className = 'chip chip-warning';
+      warn.textContent = `⚠ ${doc.meta.warnings.length} notice${doc.meta.warnings.length > 1 ? 's' : ''}`;
+      warn.title = doc.meta.warnings.join('\n');
+      meta.appendChild(warn);
+    }
 
     const percent = VV.libraryStore.progressPercent(doc);
     if (percent > 0) {
@@ -88,25 +105,43 @@
     emptyEl.hidden = docs.length > 0;
   }
 
-  function importFile(file) {
+  function setBusy(busy) {
+    ['btn-import-file', 'btn-import-url', 'btn-add-text'].forEach((id) => {
+      $(id).disabled = busy;
+    });
+  }
+
+  /* Every file import flows through the import manager: byte-signature
+     routing → format adapter → quality gate. Rejected text never enters
+     the library and never reaches the speech engine. */
+  async function importFile(file) {
     if (!file) return;
-    if (file.size > VV.config.LIMITS.importMaxChars) {
-      VV.announcer.assertive('That file is too large. Please choose a smaller text file.');
-      return;
+    setBusy(true);
+    VV.app.setImportStatus(`Importing “${truncate(file.name || 'file', 60)}”…`);
+    try {
+      const result = await VV.documentImport.importFile(file, {
+        onProgress: (p) => {
+          if (p && p.total) {
+            VV.app.setImportStatus(`Extracting page ${p.page} of ${p.total}…`);
+          }
+        }
+      });
+      const doc = VV.app.addDocument(result.title, result.text, 'file', true, {
+        format: result.format,
+        pageCount: result.meta.pageCount,
+        chapters: result.meta.chapters,
+        warnings: result.warnings
+      });
+      VV.app.setImportStatus('');
+      VV.announcer.polite(`Imported "${truncate(doc.title, 40)}" (${result.format.toUpperCase()}). ` +
+        (result.warnings.length ? result.warnings.join(' ') : 'Ready to read.'));
+    } catch (err) {
+      const msg = err && err.userMessage ? err.userMessage : 'That file could not be imported.';
+      VV.app.setImportStatus('');
+      VV.announcer.assertive(msg);
+    } finally {
+      setBusy(false);
     }
-    const reader = new FileReader();
-    reader.onload = () => {
-      const text = String(reader.result || '').trim();
-      if (!text) {
-        VV.announcer.assertive('That file looks empty.');
-        return;
-      }
-      const title = file.name.replace(/\.(txt|md|text)$/i, '').trim() || file.name;
-      const doc = VV.app.addDocument(title, text, 'file', true);
-      VV.announcer.polite(`Imported "${truncate(doc.title, 40)}" and started reading view.`);
-    };
-    reader.onerror = () => VV.announcer.assertive('Could not read that file.');
-    reader.readAsText(file);
   }
 
   VV.libraryView = {
@@ -117,6 +152,7 @@
 
       $('btn-add-text').addEventListener('click', () => VV.dialogs.openAdd());
       $('btn-import-file').addEventListener('click', () => fileInput.click());
+      $('btn-import-url').addEventListener('click', () => VV.dialogs.openUrl());
       fileInput.addEventListener('change', () => {
         importFile(fileInput.files && fileInput.files[0]);
         fileInput.value = ''; // allow re-importing the same file
