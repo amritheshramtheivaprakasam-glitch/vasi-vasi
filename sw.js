@@ -7,7 +7,7 @@
    ============================================================ */
 'use strict';
 
-const VERSION = 'vasi-vasi-v1';
+const VERSION = 'vasi-vasi-v2';
 const SHELL = [
   './',
   './index.html',
@@ -31,6 +31,8 @@ const SHELL = [
   './src/ui/dialogs.js',
   './src/ui/libraryView.js',
   './src/ui/readerView.js',
+  './src/support/supportConfig.js',
+  './src/support/supportDialog.js',
   './src/main.js'
 ];
 

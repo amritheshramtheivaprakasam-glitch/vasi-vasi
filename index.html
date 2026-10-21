@@ -29,6 +29,7 @@
         </p>
         <nav class="header-actions" aria-label="App actions">
           <button type="button" id="btn-home" class="btn btn-ghost" hidden>⌂ Library</button>
+          <button type="button" id="btn-support" class="btn btn-ghost">♥ Support</button>
           <button type="button" id="btn-settings" class="btn btn-ghost">⚙ Settings</button>
           <button type="button" id="btn-help" class="btn btn-ghost">? Help</button>
         </nav>
@@ -266,6 +267,15 @@
     </form>
   </dialog>
 
+  <!-- ============================== SUPPORT DIALOG ============================== -->
+  <dialog id="dlg-support" class="dialog" aria-labelledby="support-title">
+    <form method="dialog" class="dialog-body">
+      <h2 id="support-title">♥ Support Vasi Vasi</h2>
+      <div class="dialog-body-dynamic"></div>
+      <p id="support-status" class="hint" role="status"></p>
+    </form>
+  </dialog>
+
   <!-- Live regions for screen-reader announcements -->
   <p class="sr-only" role="status" id="announcer-polite"></p>
   <p class="sr-only" role="alert" id="announcer-assertive"></p>
@@ -291,6 +301,8 @@
   <script src="src/ui/dialogs.js"></script>
   <script src="src/ui/libraryView.js"></script>
   <script src="src/ui/readerView.js"></script>
+  <script src="src/support/supportConfig.js"></script>
+  <script src="src/support/supportDialog.js"></script>
   <script src="src/main.js"></script>
 </body>
 </html>

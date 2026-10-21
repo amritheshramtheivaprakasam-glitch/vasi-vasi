@@ -60,6 +60,62 @@ Then open `http://localhost:8000`.
 **Option 2 — direct:** simply open `index.html` in a browser. Everything works
 (the service worker that enables install/offline-cache only activates over http/https).
 
+## 🌐 Deploying at ₹0 (Cloudflare Pages)
+
+No build step is needed — the repository root **is** the deployable artifact.
+
+**Drag-and-drop (fastest):** Cloudflare dashboard → Workers & Pages → Create →
+Pages → *Upload assets* → select this folder. Done — you get a free
+`*.pages.dev` URL with HTTPS.
+
+**CLI:** `npx wrangler pages deploy . --project-name vasi-vasi`
+
+**Git-connected:** connect the repo, set **Build command: *(empty)*** and
+**Build output directory: **`/``.
+
+> Cloudflare Pages' free tier permits commercial use within its terms, which
+> GitHub Pages explicitly restricts for commercial software — hence this choice.
+> An Android Play Store listing can come later (one-time developer registration
+> fee); the installable PWA covers mobile now at ₹0.
+
+## 🧪 Tests
+
+```bash
+node tests/run.js   # all suites, zero dependencies required
+npm install && npm test   # additionally activates the jsdom integration suite
+```
+
+| Suite | Guards |
+|---|---|
+| `tests/unit/` | Sentence/paragraph parsing (EN + தமிழ் + danda), stores, stats, progress, truncation |
+| `tests/offline/` | Every precached file exists; **zero external network references** in shipped code; no fetch/XHR in core |
+| `tests/accessibility/` | Live regions, dialog labels, named buttons, labeled controls, themes, focus, 44px targets |
+| `tests/integration/` | Full boot → play → pause → navigate → resume → finish under jsdom with a mocked speech engine |
+
+The offline suite is what keeps the **₹0 operating model an architectural
+requirement**: if anyone ever adds an external script or fetch, tests go red.
+
+## 💚 Sustainability model
+
+Open-source core (MIT), free forever — revenue never gates reading:
+
+| Channel | What it is |
+|---|---|
+| **Community support** | Voluntary ₹29/₹99/₹299/custom contributions via the in-app ♥ Support dialog (configure links in `src/support/supportConfig.js`) |
+| **Institutional services** | Paid deployment, training and accessibility setup for schools, libraries, NGOs |
+| **Sponsored accessibility** | CSR/philanthropy-funded deployments for underserved readers |
+
+`src/support/` is strictly decoupled from the reading core: empty config,
+and the app ships 100% functional with an honest "channels being set up"
+message instead.
+
+## ⚖️ License & legal
+
+- **MIT License** — see [LICENSE](LICENSE)
+- [PRIVACY.md](PRIVACY.md) — the app collects nothing; everything stays on-device
+- [NOTICE.md](NOTICE.md) — zero third-party runtime code; original bundled texts
+- [CONTRIBUTING.md](CONTRIBUTING.md) — ground rules (no paywalls, no network deps, a11y required)
+
 ## ⌨️ Keyboard shortcuts (while reading)
 
 | Key | Action |

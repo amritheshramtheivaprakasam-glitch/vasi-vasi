@@ -165,6 +165,7 @@
     VV.readerView.init(reader);
     VV.libraryView.init();
     VV.dialogs.init();
+    VV.supportDialog.init();
     VV.shortcuts.init();
 
     if (!speech.supported) VV.readerView.setUnsupported();
