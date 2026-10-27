@@ -7,7 +7,7 @@
    ============================================================ */
 'use strict';
 
-const VERSION = 'vasi-vasi-v3';
+const VERSION = 'vasi-vasi-v4';
 /* The vendor/ parser libraries (pdf.js, JSZip, Mammoth, Readability)
    are intentionally NOT precached: they load lazily on first import of
    their format, and the runtime handler below caches them then — so
@@ -17,6 +17,8 @@ const SHELL = [
   './index.html',
   './manifest.webmanifest',
   './assets/icons/icon.svg',
+  './assets/icons/icon-512.png',
+  './assets/icons/icon-512-maskable.png',
   './styles/tokens.css',
   './styles/base.css',
   './styles/layout.css',
