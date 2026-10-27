@@ -39,10 +39,14 @@ window.speechSynthesis = {
   addEventListener() {},
   speak(u) {
     window.__spoken.push(u.text);
-    this.speaking = true;
-    setTimeout(() => u.onstart && u.onstart(), 0);
+    // Emulate a real engine honestly: speaking=true after onstart, and
+    // ALREADY false by the time onend fires (real engines are done
+    // speaking when they report the end — the production cancel-gap
+    // logic keys off this flag).
+    this.speaking = false;
+    setTimeout(() => { this.speaking = true; u.onstart && u.onstart(); }, 0);
     setTimeout(() => u.onboundary && u.onboundary({ charIndex: 0, charLength: 5 }), 1);
-    setTimeout(() => u.onend && u.onend(), 40);
+    setTimeout(() => { this.speaking = false; u.onend && u.onend(); }, 40);
   },
   cancel() { this.speaking = false; },
   pause() { this.paused = true; },

@@ -110,9 +110,17 @@ npm install && npm test   # additionally activates the jsdom integration suite
 
 | Suite | Guards |
 |---|---|
-| `tests/unit/` | Sentence/paragraph parsing (EN + தமிழ் + danda), stores, stats, progress, truncation; **documents**: signature routing, BOM decoding, quality gate, PDF line reconstruction, zip sniffing |
+| `tests/unit/` | Sentence/paragraph parsing (EN + தமிழ் + danda), stores, stats, progress, truncation; **documents**: signature routing, BOM decoding, quality gate, PDF line reconstruction, zip sniffing; **speech**: silence watchdog, cancel-gap race, stop-safety (VOICE-001) |
+| `tests/security/` | Release-blocking invariants: CSP/Referrer/Permissions headers, pdf.js `isEvalSupported:false` (CVE-2024-4367), HTTPS-only URL import, secrets/debug scans, APK manifest surface |
 | `tests/fixtures/` | Committed micro-fixtures: text-layer PDF, scanned-style PDF, fake-PDF text, plain text |
 | `tests/offline/` | Every precached file exists; **zero AUTOMATIC external network references** (the one sanctioned fetch lives only in `urlAdapter.js` — the explicit URL-import feature); **vendored libraries pinned by SHA-256** |
+
+## 🔒 Security & release readiness
+
+- Standing quality gates every release must pass: **[docs/QUALITY-GATES.md](docs/QUALITY-GATES.md)**
+- Full security/readiness report — evidence, open register, honest APK status:
+  **[docs/SECURITY-AND-READINESS.md](docs/SECURITY-AND-READINESS.md)** (v0.2.1)
+- Production HTTP security headers for Cloudflare Pages ship in [`_headers`](_headers); a meta CSP covers `file://` launch.
 | `tests/accessibility/` | Live regions, dialog labels, named buttons, labeled controls, themes, focus, 44px targets |
 | `tests/integration/` | Full boot → play/pause/navigate/resume/finish; **import workflows**: valid PDF → reader → resume, damaged + password PDF errors, EPUB spine extraction, gate rejections — none enter the library |
 

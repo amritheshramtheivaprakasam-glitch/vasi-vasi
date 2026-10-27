@@ -107,7 +107,12 @@
         data: bytes,
         cMapUrl: new URL('vendor/pdfjs/cmaps/', base).href,
         cMapPacked: true,
-        standardFontDataUrl: new URL('vendor/pdfjs/standard_fonts/', base).href
+        standardFontDataUrl: new URL('vendor/pdfjs/standard_fonts/', base).href,
+        // SEC-PDF-002: never compile JavaScript embedded in a PDF's fonts
+        // (CVE-2024-4367, fixed upstream in pdf.js 4.2.67 — we pin v3 for
+        // classic-script/file:// compatibility, so mitigation is required
+        // here). Text extraction does not depend on font-program eval.
+        isEvalSupported: false
       }).promise;
     } catch (err) {
       const name = err && err.name;

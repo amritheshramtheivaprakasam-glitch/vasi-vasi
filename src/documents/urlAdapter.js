@@ -25,8 +25,15 @@
     } catch (e) {
       throw userError("That doesn't look like a valid web address.");
     }
-    if (u.protocol !== 'http:' && u.protocol !== 'https:') {
-      throw userError('Only web addresses starting with http:// or https:// can be imported.');
+    // SEC-URL-001: HTTPS only — plain HTTP can be tampered with in transit,
+    // and tampered article HTML would reach the reader's speech engine.
+    // Known browser limit (documented, not silently ignored): fetch follows
+    // redirects per CORS rules and we cannot inspect intermediate hops;
+    // the browser still applies CORS to the final origin. Never promise
+    // universal access — sites that block cross-origin reads fail honestly
+    // with the paste fallback below.
+    if (u.protocol !== 'https:') {
+      throw userError('Only secure web addresses starting with https:// can be imported.');
     }
 
     if (onProgress) onProgress({ phase: 'fetch' });

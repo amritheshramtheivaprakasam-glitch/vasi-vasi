@@ -1,0 +1,10 @@
+# Vasi Vasi — production HTTP security headers for Cloudflare Pages.
+# Meta CSP in index.html covers file:// and generic static hosting; this
+# file enforces the same policy as real HTTP headers on Pages deploys.
+# NOTE: no frame-ancestors / X-Frame-Options here on purpose — the Arena
+# live preview embeds the app in an iframe and must keep working.
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https:; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'
+  Referrer-Policy: no-referrer
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), usb=(), bluetooth=()
+  X-Content-Type-Options: nosniff

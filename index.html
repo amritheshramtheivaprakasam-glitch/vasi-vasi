@@ -2,6 +2,14 @@
 <html lang="en" data-theme="auto">
 <head>
   <meta charset="UTF-8">
+  <!-- SEC-CSP-001: restrictive policy for meta CSP (works on file:// too).
+       script-src 'self': no inline/eval scripts anywhere. worker-src allows
+       the vendored pdf.js Web Worker. connect-src https: covers the
+       user-initiated URL import. On Cloudflare Pages, real HTTP headers are
+       enforced via the root _headers file. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https:; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'self'; manifest-src 'self'">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), usb=(), bluetooth=()">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Vasi Vasi — a free, fully offline reading companion that reads any text aloud for blind and low-vision readers. No accounts, no cloud, no AI services.">
   <meta name="theme-color" content="#8a3a0f">

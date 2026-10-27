@@ -9,6 +9,8 @@ const suites = [
   'unit/stores.test.js',
   'unit/documents.test.js',
   'unit/pdfFixture.test.js',
+  'unit/speech.test.js',
+  'security/policy.test.js',
   'offline/sw-shell.test.js',
   'accessibility/markup.test.js',
   'integration/app.smoke.test.js'
